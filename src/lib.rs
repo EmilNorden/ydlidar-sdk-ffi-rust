@@ -11,20 +11,23 @@ mod tests {
 
     #[test]
     fn sanity_set_get_options() {
-        let mut instance = unsafe { CYdLidar::new() };
+        let mut instance = unsafe { lidarCreate() };
 
         let value = "/dev/ydlidar";
         let ok = unsafe {
-            instance.setlidaropt(
+            setlidaropt(
+                instance,
                 LidarProperty_LidarPropSerialPort.try_into().unwrap(),
                 value.as_ptr() as *const c_void,
-                value.len().try_into().unwrap())
+                value.len().try_into().unwrap(),
+            )
         };
         assert!(ok);
 
         let mut value_buffer = [0u8; 12];
         let ok = unsafe {
-            instance.getlidaropt(
+            getlidaropt(
+                instance,
                 LidarProperty_LidarPropSerialPort.try_into().unwrap(),
                 value_buffer.as_mut_ptr() as *mut c_void,
                 12)
@@ -34,5 +37,7 @@ mod tests {
         let received_value = CString::new(value_buffer).unwrap().into_string().unwrap();
 
         assert_eq!(value, received_value);
+
+        unsafe { lidarDestroy(&mut instance) };
     }
 }

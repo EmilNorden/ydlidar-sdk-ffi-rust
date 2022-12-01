@@ -21,13 +21,24 @@ fn main() {
 
     let bindings = bindgen::Builder::default()
         .header("wrapper.hpp")
-        //.clang_arg("-x")
-        //.clang_arg("c++")
-        .clang_arg("-std=c++14")
-        .allowlist_type("CYdLidar")
-        .allowlist_type("LidarProp.*") // Allow all LidarProp constants. Hopefully this works
-        .opaque_type("std::.*")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+        .allowlist_function("lidarCreate")
+        .allowlist_function("lidarDestroy")
+        .allowlist_function("setlidaropt")
+        .allowlist_function("getlidaropt")
+        .allowlist_function("GetSdkVersion")
+        .allowlist_function("initialize")
+        .allowlist_function("GetLidarVersion")
+        .allowlist_function("turnOn")
+        .allowlist_function("doProcessSimple")
+        .allowlist_function("turnOff")
+        .allowlist_function("disconnecting")
+        .allowlist_function("DescribeError")
+        .allowlist_function("os_init")
+        .allowlist_function("os_isOk")
+        .allowlist_function("os_shutdown")
+        .allowlist_function("lidarPortList")
+        .allowlist_type("LidarProp.*")
         .generate()
         .expect("Unable to generate bindings");
 
@@ -36,3 +47,4 @@ fn main() {
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
 }
+
