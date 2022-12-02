@@ -4,6 +4,31 @@
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
+impl Default for LaserConfig {
+    fn default() -> Self {
+        Self {
+            min_angle: 0.0,
+            max_angle:0.0,
+            angle_increment: 0.0,
+            time_increment: 0.0,
+            max_range: 0.0,
+            min_range: 0.0,
+            scan_time: 0.0,
+        }
+    }
+}
+
+impl Default for LaserFan {
+    fn default() -> Self {
+        Self {
+            config: LaserConfig::default(),
+            npoints: 0,
+            points: std::ptr::null_mut(),
+            stamp: 0,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::ffi::{c_void, CString};
